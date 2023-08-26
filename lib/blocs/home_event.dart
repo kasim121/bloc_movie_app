@@ -1,10 +1,6 @@
-// part of 'posts_bloc.dart';
+import 'package:flutter/material.dart';
 
-// @immutable
-// abstract class PostsEvent {}
-
-
-// class PostsInitialFetchEvent extends PostsEvent{}
-
-
-// class PostAddEvent extends PostsEvent{}
+@immutable
+abstract class AccEvent{}
+class AccInitialFetchEvent extends AccEvent{}
+class AccAddEvent extends AccEvent{}

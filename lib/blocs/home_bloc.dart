@@ -1,35 +1,27 @@
-// import 'dart:async';
-// import 'dart:convert';
-// import 'dart:developer';
-// import 'package:bloc/bloc.dart';
-// import 'package:meta/meta.dart';
-// import 'package:http/http.dart' as http;
-// import '../models/banner_model.dart';
+import 'dart:async';
 
+import 'package:bloc/bloc.dart';
+import 'package:bloc_api_app/blocs/home_event.dart';
+import 'package:bloc_api_app/blocs/home_state.dart';
+import 'package:bloc_api_app/models/banner_model.dart';
+import 'package:bloc_api_app/repos/home_repo.dart';
 
-
-// class PostsBloc extends Bloc<PostsEvent, PostsState> {
-//   PostsBloc() : super(PostsInitial()) {
-//     on<PostsInitialFetchEvent>(postsInitialFetchEvent);
-//     on<PostAddEvent>(postAddEvent);
-//   }
-
-//   FutureOr<void> postsInitialFetchEvent(
-//       PostsInitialFetchEvent event, Emitter<PostsState> emit) async {
-//     emit(PostsFetchingLoadingState());
-//     List<BannerModel> posts = await PostsRepo.fetchPosts();
-
-//     emit(PostFetchingSuccessfulState(posts: posts));
-//   }
-
-//   FutureOr<void> postAddEvent(
-//       PostAddEvent event, Emitter<PostsState> emit) async {
-//     bool success = await PostsRepo.addPost();
+class AccBloc extends Bloc<AccEvent, AccState>{
+ AccBloc() : super(AccInitial()){
+on<AccInitialFetchEvent>(accInitialFetchEvent);
+on<AccAddEvent>(accAddEvent);
+ }
   
-//     if (success) {
-//       emit(PostsAdditionSuccessState());
-//     } else {
-//       emit(PostsAdditionErrorState());
-//     }
-//   }
-// }
+
+  FutureOr<void> accInitialFetchEvent(AccInitialFetchEvent event, Emitter<AccState> emit) async{
+  emit(AccFetchingLoadingState());
+   List<Datum> bannerList = await AccRepo.fetchBanerList();
+   emit(AccFetchingSuccessfulState(bannerList: bannerList));
+  }
+
+  FutureOr<void> accAddEvent(AccAddEvent event, Emitter<AccState> emit) {
+
+
+}
+
+}

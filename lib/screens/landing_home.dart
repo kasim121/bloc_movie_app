@@ -33,9 +33,9 @@ class _LandingPageState extends State<LandingPage>
   @override
   Widget build(BuildContext context) {
   double myHeight = MediaQuery.of(context).size.height;
-   double myWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-  
+
       body: NestedScrollView(
         headerSliverBuilder: (_, __) {
           return [

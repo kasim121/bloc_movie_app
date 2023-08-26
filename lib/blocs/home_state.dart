@@ -1,24 +1,27 @@
-// part of 'posts_bloc.dart';
+import 'package:flutter/material.dart';
 
-// @immutable
-// abstract class PostsState {}
+import '../models/banner_model.dart';
 
-// abstract class PostsActionState extends PostsState {}
+@immutable
+abstract class AccState {}
 
-// class PostsInitial extends PostsState {}
+abstract class AccActionState extends AccState {}
 
-// class PostsFetchingLoadingState extends PostsState {}
+class AccInitial extends AccState {}
 
-// class PostsFetchingErrorState extends PostsState {}
+class AccFetchingLoadingState extends AccState {}
 
-// class PostFetchingSuccessfulState extends PostsState {
-//   final List<BannerModel> posts;
-//   PostFetchingSuccessfulState({
-//     required this.posts,
-//   });
-// }
+class AccFetchingErrorState extends AccState {}
 
-// class PostsAdditionSuccessState extends PostsActionState{}
+class AccFetchingSuccessfulState extends AccState {
+  final List<Datum> bannerList;
+  AccFetchingSuccessfulState({
+    required this.bannerList,
+  });
+}
 
 
-// class PostsAdditionErrorState extends PostsActionState{}
+class AccAdditionSuccessState extends AccActionState{}
+
+
+class AccAdditionErrorState extends AccActionState{}

@@ -1,6 +1,11 @@
+import 'package:bloc_api_app/blocs/home_event.dart';
+import 'package:bloc_api_app/blocs/home_state.dart';
 import 'package:bloc_api_app/screens/home_details.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+import '../blocs/home_bloc.dart';
 
 class Movies extends StatefulWidget {
   const Movies({super.key});
@@ -10,7 +15,15 @@ class Movies extends StatefulWidget {
 }
 
 class _MoviesState extends State<Movies> {
+
       final PageController _pageViewController = PageController(initialPage: 0);
+        final AccBloc postsBloc = AccBloc();
+
+  @override
+  void initState() {
+    postsBloc.add(AccInitialFetchEvent());
+    super.initState();
+  }
       @override
   void dispose() {
     _pageViewController.dispose();
@@ -22,7 +35,29 @@ class _MoviesState extends State<Movies> {
     double myWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.grey,
-      body: SingleChildScrollView(
+      body:    BlocConsumer<AccBloc, AccState>(
+        bloc: postsBloc,
+         listenWhen: (previous, current) => current is AccActionState,
+          buildWhen: (previous, current) => current is! AccActionState,
+             listener: (context, state) {},
+        builder: (context,state) {
+            switch (state.runtimeType) {
+              case AccFetchingLoadingState:
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              case AccFetchingSuccessfulState:
+                final successState = state as AccFetchingSuccessfulState;
+
+                return 
+                
+                Container(
+                  child: ListView.builder(
+                    itemCount: successState.bannerList.length,
+                    itemBuilder: (context, index) {
+                  var contentList = successState.bannerList[index].contentList;
+                  var datum = successState.bannerList[index];
+                      return     SingleChildScrollView(
         child: Column(
           children: [
                Stack(children: [
@@ -34,18 +69,20 @@ class _MoviesState extends State<Movies> {
                         onPageChanged: (int page) {
                           setState(() {});
                         },
-                        itemCount: 5,
+                        itemCount: successState.bannerList.length,
                         itemBuilder: (context, index) {
+                                var contentList = successState.bannerList[index].contentList[index].imageUrl;
+                  var datum = successState.bannerList[index];
                           return      Padding(
               padding: const EdgeInsets.symmetric(horizontal: 0.0),
               child: Container(
                 height: myHeight * 0.25,
                 width: double.infinity,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   image: DecorationImage(
                     fit: BoxFit.fill,
                     image: NetworkImage(
-                        'https://images.unsplash.com/photo-1503925802536-c9451dcd87b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'),
+                       contentList),
                   ),
                 ),
               ),
@@ -68,7 +105,7 @@ class _MoviesState extends State<Movies> {
                     child: SmoothPageIndicator(
                       controller: _pageViewController,
                       count: 5,
-                      effect: WormEffect(
+                      effect: const WormEffect(
                         activeDotColor: Colors.blue,
                         dotColor: Colors.grey,
                         dotHeight: 7,
@@ -112,8 +149,9 @@ class _MoviesState extends State<Movies> {
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
-                      itemCount: 5,
+                      itemCount: datum.contentList.length,
                       itemBuilder: (BuildContext context, int index) {
+                            var content = datum.contentList[index];
                         return GestureDetector(
                           onTap: () {},
                           child: SizedBox(
@@ -142,13 +180,13 @@ class _MoviesState extends State<Movies> {
                                     child: Stack(
                                       children: [
                                         Image.network(
-                                          'https://e1.pxfuel.com/desktop-wallpaper/49/663/desktop-wallpaper-new-movie-posters-hollywood-movie-2022.jpg',
+                                          content.imageUrl,
                                           fit: BoxFit.fill,
                                           height: myHeight * 0.315,
                                           width: myWidth * 0.5,
                                         ),
                                         Positioned(
-                                          top: 10,
+                                          top: 5,
                                           right: 6,
                                           child: Container(
                                               width: 35,
@@ -198,11 +236,11 @@ class _MoviesState extends State<Movies> {
               child: Container(
                 height: myHeight * 0.08,
                 width: double.infinity,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   image: DecorationImage(
                     fit: BoxFit.fill,
                     image: NetworkImage(
-                        'https://wallpaperaccess.com/full/2440003.jpg'),
+                        contentList[index].imageUrl.toString()),
                   ),
                 ),
               ),
@@ -282,7 +320,22 @@ class _MoviesState extends State<Movies> {
             ),
           ],
         ),
+      );
+    
+                   
+                    },
+                  ),
+                );
+            
+              default:
+                return const SizedBox();
+            }
+        
+        }
       ),
+   
+      
+    
     );
   }
 
